@@ -1,0 +1,11 @@
+package com.auca.echurch.repository;
+
+import java.util.UUID;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.auca.echurch.model.Ministry;
+
+public interface MinistryRepository extends JpaRepository<Ministry,UUID> {
+
+}
