@@ -58,11 +58,11 @@ public class ServiceRequest {
     public void setId(UUID id) {
         this.id = id;
     }
-    public LocalDate getServiDate() {
+    public LocalDate getServiceDate() {
         return serviceDate;
     }
-    public void setServiDate(LocalDate serviDate) {
-        this.serviceDate = serviDate;
+    public void setServiceDate(LocalDate serviceDate) {
+        this.serviceDate = serviceDate;
     }
     public ServiceStatus getStatus() {
         return status;
@@ -76,4 +76,5 @@ public class ServiceRequest {
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
     }
+
 }

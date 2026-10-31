@@ -3,13 +3,13 @@ package com.auca.echurch.model;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -30,11 +30,11 @@ public class Pastor {
 
     private Parish parish;
 
-    @ManyToOne 
+    @ManyToMany 
     @JoinTable(name="pastor_ministry",
-        joinColumns=@JoinColumn(name="ministry_id")
+        joinColumns=@JoinColumn(name="pastor_id"),
+        inverseJoinColumns = @JoinColumn (name = "ministry_id")
     )
-
     private List<Ministry>ministries;
 
     public Pastor(){}
@@ -62,5 +62,11 @@ public class Pastor {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public Parish getParish(){return parish;}
+    public void setParish(Parish parish){this.parish = parish;}
+
+    public List<Ministry> getMinistries(){return  ministries;}
+    public void setMinistries(List<Ministry> ministries) {this.ministries = ministries; }
 
 }
