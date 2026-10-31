@@ -44,6 +44,10 @@ public String delete (UUID id){
 ministryRepository.deleteById(id);
 return"Ministry deleted successfully";
     }
+
+public List<Ministry> getUnused(){
+    return ministryRepository.findUnusedMinistries();
+}
 }
 
 

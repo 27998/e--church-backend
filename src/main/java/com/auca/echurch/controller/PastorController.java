@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.auca.echurch.model.Pastor;
@@ -71,5 +72,10 @@ public class PastorController {
                 return new ResponseEntity<>(message,HttpStatus.OK);
             }
         }
+
+    @GetMapping ("/by-ministry")
+    public ResponseEntity<List<Pastor>> getByMinistry(@RequestParam String name){
+        return new ResponseEntity<>(pastorService.getByMinistry(name), HttpStatus.OK);
+    }
     
 }

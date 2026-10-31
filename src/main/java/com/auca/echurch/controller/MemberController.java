@@ -76,4 +76,12 @@ public ResponseEntity<String>delete(@PathVariable UUID id){
 public ResponseEntity<List<Member>> getByLastName(@RequestParam String lastName){
    return new ResponseEntity<>(memberService.getByLastName(lastName), HttpStatus.OK);
 }
+
+@GetMapping ("/of-pastor/{pastorId}")
+public ResponseEntity<Object> getOfPastor(@PathVariable UUID pastorId ){
+    if(!memberService.pastorExists(pastorId)){
+        return new ResponseEntity<>("The pastor with that id does not exist", HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<>(memberService.getOfPastor(pastorId), HttpStatus.OK);
+}
 }

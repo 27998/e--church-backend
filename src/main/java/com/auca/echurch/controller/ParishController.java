@@ -73,5 +73,10 @@ else{
 }
 
 }
+
+@GetMapping ("/free")
+public ResponseEntity<List<Parish>> getFree(){
+    return new ResponseEntity<>(parishService.getFree(), HttpStatus.OK);
+}
 }
 

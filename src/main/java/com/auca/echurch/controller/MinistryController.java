@@ -75,6 +75,10 @@ public class MinistryController {
 
         }
     }
+    @GetMapping ("/unused")
+    public ResponseEntity<List<Ministry>> getUnused(){
+        return new ResponseEntity<>(ministryService.getUnused(), HttpStatus.OK);
+    }
             }
         
 

@@ -8,13 +8,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import com.auca.echurch.repository.MemberRepository;
+import com.auca.echurch.repository.PastorRepository;
 
 @Service
 public class MemberService {
   
     @Autowired 
     private MemberRepository memberRepository;
-
+    @Autowired private PastorRepository pastorRepository;
     public String save(Member member){
         memberRepository.save(member);
         return "Member saved successfully";
@@ -47,5 +48,13 @@ public String delete(UUID id){
     }
     memberRepository.deleteById(id);
     return "Member deleted successfully";
+}
+
+public boolean pastorExists(UUID pastorId){
+    return pastorRepository.existsById(pastorId);
+}
+
+public List<Member> getOfPastor(UUID pastorId){
+    return memberRepository.findMembersOfPastor(pastorId);
 }
 }
