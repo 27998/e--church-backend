@@ -19,6 +19,19 @@ public class ServiceRequestService {
     private ServiceRequestRepository serviceRequestRepository;
 
     public String save(ServiceRequest serviceRequest){
+        if (serviceRequest.getServiceDate() != null
+        && serviceRequest.getServiceDate().isBefore(LocalDate.now())){
+            return  "Service request date cannot be in the past";
+
+    }
+        if (serviceRequest.getPastor() != null && serviceRequest.getServiceDate() != null
+                && serviceRequestRepository.existsByPastorIdAndServiceDateAndStatusNot(
+                    serviceRequest.getPastor().getId(),
+                    serviceRequest.getServiceDate(),
+                    ServiceStatus.DECLINED) ) {
+                        return "Pastor already leads a service on that date";
+         }
+        serviceRequest.setStatus(ServiceStatus.REQUESTED);
         serviceRequestRepository.save(serviceRequest);
         return "Service request saved successfully";
     }
@@ -30,13 +43,46 @@ public class ServiceRequestService {
 
     }
     public String update(UUID id, ServiceRequest serviceRequest){
-        if(!serviceRequestRepository.existsById(id)){
+        Optional<ServiceRequest> existing = serviceRequestRepository.findById(id);
+
+        if(existing.isEmpty()){
             return "The service request with that id does not exist";
         }
         serviceRequest.setId(id);
+        serviceRequest.setStatus(existing.get().getStatus());
         serviceRequestRepository.save(serviceRequest);
         return "Service request updated successfully";
     }
+
+    public String updateStatus(UUID id, ServiceStatus newStatus){
+        Optional<ServiceRequest> found = serviceRequestRepository.findById(id);
+        if (found.isEmpty()){
+            return "The service request with that id does not exist";
+
+        }
+        ServiceRequest serviceRequest = found.get();
+        ServiceStatus current = serviceRequest.getStatus();
+
+        boolean allowed = false;
+        if (current == ServiceStatus.REQUESTED
+            && (newStatus == ServiceStatus.APPROVED || newStatus == ServiceStatus.DECLINED )
+        ){
+            allowed = true;
+        }
+        else if (current == ServiceStatus.APPROVED
+            && (newStatus == ServiceStatus.HELD || newStatus == ServiceStatus.DECLINED)
+        ) {
+            allowed = true;
+        }
+        if(!allowed){
+            return "Cannot change status from " + current + " to " + newStatus;
+        }
+
+        serviceRequest.setStatus(newStatus);
+        serviceRequestRepository.save(serviceRequest);
+        return "Service request status updated successfully";
+    }    
+
     public List<ServiceRequest> getByStatus(ServiceStatus status){
         return serviceRequestRepository.findByStatusOrderByServiceDateAsc(status);
     }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -77,5 +78,31 @@ public class PastorController {
     public ResponseEntity<List<Pastor>> getByMinistry(@RequestParam String name){
         return new ResponseEntity<>(pastorService.getByMinistry(name), HttpStatus.OK);
     }
-    
+    @PutMapping ("/{pastorId}/ministries/{ministryId}")
+    public ResponseEntity<String> addMinistry(@PathVariable UUID pastorId){
+        String message = pastorService.addMinistry(pastorId, pastorId);
+        if(message.equals("The pastor with that id does not exist")
+                || message.equals("That ministry does not exist")){
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        }
+        else if (message.equals("The pastor already has that ministry")) {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+    }
+
+    @PatchMapping ("/{pastorId}/parish")
+    public ResponseEntity<String> changeParish(@PathVariable UUID pastorId, @RequestParam int parishNumber){
+        String message = pastorService.changeParish(pastorId, parishNumber);
+        if (message.equals("The parish with that parishNumber does not exists")) {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        }
+        if (message.equals("The parish is taken by another pastor")){
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+
+    }
 }

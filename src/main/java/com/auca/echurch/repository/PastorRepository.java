@@ -7,9 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.auca.echurch.model.Parish;
 import com.auca.echurch.model.Pastor;
 
 public interface PastorRepository extends JpaRepository<Pastor, UUID> {
     @Query("SELECT p FROM Pastor p JOIN p.ministries m WHERE LOWER(m.name) = LOWER(:name)")
     List<Pastor> findByMinistriesName(@Param ("name") String name);
+
+    boolean existsByParish(Parish parish);
 }

@@ -12,4 +12,5 @@ import com.auca.echurch.model.ServiceStatus;
 public interface ServiceRequestRepository extends JpaRepository<ServiceRequest,UUID>{
     List<ServiceRequest> findByStatusOrderByServiceDateAsc(ServiceStatus status);
     List<ServiceRequest> findByServiceDateBetweenOrderByServiceDateAsc(LocalDate start, LocalDate end);
+    boolean existsByPastorIdAndServiceDateAndStatusNot(UUID pastorId, LocalDate serviceDate, ServiceStatus status);
 }
