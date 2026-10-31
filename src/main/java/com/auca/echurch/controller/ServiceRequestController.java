@@ -1,5 +1,6 @@
 package com.auca.echurch.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.auca.echurch.model.ServiceRequest;
+import com.auca.echurch.model.ServiceStatus;
 import com.auca.echurch.service.ServiceRequestService;
 
 @RestController 
@@ -72,6 +75,18 @@ public class ServiceRequestController {
         else{
             return new ResponseEntity<>(message,HttpStatus.OK);
         }
+    }
+    @GetMapping ("/by-status")
+    public ResponseEntity<List<ServiceRequest>> getByStatus(@RequestParam ServiceStatus status){
+        return new ResponseEntity<>(serviceRequestService.getByStatus(status), HttpStatus.OK);
+    }
+
+    @GetMapping ("/between")
+    public ResponseEntity<List<ServiceRequest>> getBetween(@RequestParam String start, @RequestParam String end){
+        LocalDate startDate = LocalDate.parse(start);
+        LocalDate endDate = LocalDate.parse(end);
+
+        return new ResponseEntity<>(serviceRequestService.getBetween(startDate, endDate), HttpStatus.OK);
     }
 
 }

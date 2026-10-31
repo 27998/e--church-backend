@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.auca.echurch.model.Member;
@@ -69,5 +70,10 @@ public ResponseEntity<String>delete(@PathVariable UUID id){
     else{
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
+}
+
+@GetMapping ("/by-last-name")
+public ResponseEntity<List<Member>> getByLastName(@RequestParam String lastName){
+   return new ResponseEntity<>(memberService.getByLastName(lastName), HttpStatus.OK);
 }
 }

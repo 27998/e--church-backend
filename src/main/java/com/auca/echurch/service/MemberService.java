@@ -14,6 +14,7 @@ public class MemberService {
   
     @Autowired 
     private MemberRepository memberRepository;
+
     public String save(Member member){
         memberRepository.save(member);
         return "Member saved successfully";
@@ -25,6 +26,10 @@ public List<Member>getAll(){
 
 public Optional<Member>getById(UUID id){
     return memberRepository.findById(id);
+}
+
+public List<Member> getByLastName(String lastName){
+    return memberRepository.findByLastNameIgnoreCaseOrderByFirstNameAsc(lastName);
 }
 
 public String update(UUID id, Member member){
