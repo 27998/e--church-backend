@@ -46,6 +46,11 @@ public class ServiceRequestController {
         return new ResponseEntity<>(serviceRequestService.getAll(),
     HttpStatus.OK);
     }
+
+    @GetMapping ("/stats/by-status")
+    public ResponseEntity<List<Object[]>> getStatsByStatus(){
+        return new ResponseEntity<>(serviceRequestService.getStatsByStatus(), HttpStatus.OK);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById (@PathVariable UUID id){
         Optional<ServiceRequest>serviceRequest = 
@@ -83,6 +88,15 @@ public class ServiceRequestController {
         } else {
             return new ResponseEntity<>(message, HttpStatus.OK);
         }
+    }
+
+    @PatchMapping("/cancel-day")
+    public ResponseEntity<String> cancelDay(@RequestParam UUID pastorId,
+        @RequestParam String date
+    ){
+        LocalDate day = LocalDate.parse(date);
+        String message = serviceRequestService.cancelDay(pastorId, day);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")

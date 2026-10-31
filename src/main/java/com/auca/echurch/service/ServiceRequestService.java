@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.auca.echurch.model.ServiceRequest;
 import com.auca.echurch.model.ServiceStatus;
@@ -95,5 +96,17 @@ public class ServiceRequestService {
         }
         serviceRequestRepository.deleteById(id);
         return "Service request deleted successfully";
+    }
+
+    public List<Object[]> getStatsByStatus(){
+        return serviceRequestRepository.countRequestByStatus();
+    }
+
+    @Transactional 
+    public String cancelDay(UUID pastorId, LocalDate date){
+        int count = serviceRequestRepository.cancelDay(pastorId, date,
+             ServiceStatus.DECLINED, ServiceStatus.HELD);
+
+        return count + " service requests cancelled"; 
     }
 }
