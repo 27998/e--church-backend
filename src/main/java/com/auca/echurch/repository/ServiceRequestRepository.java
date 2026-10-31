@@ -19,7 +19,7 @@ public interface ServiceRequestRepository extends JpaRepository<ServiceRequest,U
 
     @Query 
     ("SELECT r.status, COUNT(r) FROM ServiceRequest r GROUP BY r.status")
-    List<Object[]> countRequestByStatus();
+    List<Object[]> countRequestsByStatus();
 
     @Modifying 
     @Query 

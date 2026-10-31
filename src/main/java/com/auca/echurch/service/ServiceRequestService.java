@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.auca.echurch.model.ServiceRequest;
 import com.auca.echurch.model.ServiceStatus;
+import com.auca.echurch.repository.ServiceRecordRepository;
 import com.auca.echurch.repository.ServiceRequestRepository;
 
 @Service
@@ -18,6 +19,7 @@ public class ServiceRequestService {
 
     @Autowired 
     private ServiceRequestRepository serviceRequestRepository;
+    @Autowired private ServiceRecordRepository serviceRecordRepository;
 
     public String save(ServiceRequest serviceRequest){
         if (serviceRequest.getServiceDate() != null
@@ -91,15 +93,20 @@ public class ServiceRequestService {
         return serviceRequestRepository.findByServiceDateBetweenOrderByServiceDateAsc(startDate, endDate);
     }
     public String delete(UUID id){
-        if(!serviceRequestRepository.existsById(id)){
-            return " The service request with that id does not exist";
+        Optional<ServiceRequest> found = serviceRequestRepository.findById(id);
+        if(found.isEmpty()){
+            return "The service request with that id does not exist";
+        }
+
+        if(serviceRecordRepository.existsByServiceRequest(found.get())){
+            return " That Service request has service records, delete them first";
         }
         serviceRequestRepository.deleteById(id);
         return "Service request deleted successfully";
     }
 
     public List<Object[]> getStatsByStatus(){
-        return serviceRequestRepository.countRequestByStatus();
+        return serviceRequestRepository.countRequestsByStatus();
     }
 
     @Transactional 

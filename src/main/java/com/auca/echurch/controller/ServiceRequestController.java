@@ -106,6 +106,9 @@ public class ServiceRequestController {
             return new ResponseEntity<>(message,HttpStatus.NOT_FOUND);
 
         }
+        else if (message.equals("That service request has service records, delete them first")) {
+            return new ResponseEntity<>(message,HttpStatus.CONFLICT);
+        }
         else{
             return new ResponseEntity<>(message,HttpStatus.OK);
         }
